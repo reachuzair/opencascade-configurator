@@ -1,0 +1,6 @@
+# To install PythonOCC (optional):
+# conda install -c conda-forge pythonocc-core
+# 
+# Or with pip (may not work):
+# pip install pythonocc-core
+

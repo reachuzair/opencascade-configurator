@@ -1,0 +1,20 @@
+# Python Dependencies for Open Cascade Configurator
+# DO NOT install with pip - Use conda instead (see below)
+
+# PythonOCC - Open Cascade Technology bindings
+# INSTALL WITH CONDA (REQUIRED):
+#   conda create -n opencascade python=3.10
+#   conda activate opencascade
+#   conda install -c conda-forge pythonocc-core
+
+# pythonocc-core  # Do not use pip - will fail
+
+# Why conda?
+# PythonOCC has complex C++ dependencies (OpenCASCADE, OpenGL, etc.)
+# that are extremely difficult to build from source.
+# Conda provides pre-built binaries with all dependencies.
+
+# Optional: Development tools
+# pytest>=7.0
+# black>=23.0
+
