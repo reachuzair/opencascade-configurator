@@ -1,180 +1,120 @@
 # Open Cascade Configurator
 
-A web-based parametric CAD configurator using **Open Cascade** to generate 3D models and engineering drawings from user inputs.
+Web-based parametric CAD configurator that generates 3D models and exports them to STEP/STL formats using OpenCascade.
 
-## 🎯 Project Overview
+## Features
 
-An online CAD tool that allows users to configure mechanical parts by inputting parameters (dimensions, shapes, materials, etc.) and instantly:
+- 🎨 Configure parametric 3D models (Box, Cylinder, Cone, Sphere, Bottle)
+- 👁️ Real-time 3D preview with Three.js
+- 📥 Export to STEP, STL, BREP formats
+- 💾 Save and manage configurations
 
-- ✅ **3D Preview**: Interactive Three.js viewer with orbit controls
-- ✅ **3D Export**: STEP, STL, BREP file generation
-- ✅ **Parametric Models**: Box, Cylinder, Cone, Sphere, Bottle
-- ⚠️ **2D Drawings**: DXF placeholder (HLR not implemented)
-- ❌ **PDF Export**: Not yet implemented
+## Quick Start
 
-> **📊 Project Status**: See [PROJECT_STATUS.md](PROJECT_STATUS.md) for detailed milestone completion (~40% complete)
+### 1. Install Dependencies
 
-## 📋 Current Implementation Status
-
-**What's Working:**
-- ✅ 5 parametric models (Box, Cylinder, Cone, Sphere, Bottle)
-- ✅ PythonOCC CAD generation
-- ✅ 3D visualization with Three.js + React Three Fiber
-- ✅ STEP/STL/BREP export
-- ✅ Dynamic product catalog
-- ✅ Configuration storage with revisions
-- ✅ Full-stack integration (React + Node + Python + PostgreSQL)
-
-**What's Missing:**
-- ❌ Real DXF generation (HLR algorithm)
-- ❌ Multi-view 2D drawings
-- ❌ PDF export
-- ❌ Azure deployment
-- ❌ MS SQL Server integration
-
-## 🏗️ Architecture
-
-```
-┌─────────────┐       ┌──────────────┐       ┌─────────────┐
-│   React     │ HTTP  │   Node.js    │ spawn │  PythonOCC  │
-│  Frontend   │──────▶│   Backend    │──────▶│  CAD Engine │
-│ (Three.js)  │◀──────│   (Express)  │◀──────│             │
-└─────────────┘ JSON  └──────────────┘ JSON  └─────────────┘
-                              │
-                              ▼
-                      ┌──────────────┐
-                      │  PostgreSQL  │
-                      │   (Prisma)   │
-                      └──────────────┘
-```
-
-**Tech Stack:**
-- **Frontend**: Next.js 14 + React + TypeScript + Tailwind CSS + Three.js
-- **Backend**: Node.js + Express + TypeScript + Prisma ORM
-- **CAD Engine**: PythonOCC (via Conda)
-- **Database**: PostgreSQL (Neon)
-- **File Storage**: Local filesystem (generated CAD files)
-
-## 🚀 Quick Start
-
-See [QUICK_START.md](QUICK_START.md) for full setup instructions.
-
-**TL;DR:**
 ```bash
-# 1. Install PythonOCC
+# Install root dependencies (concurrently)
+npm install
+
+# Install all project dependencies
+npm run install:all
+```
+
+### 2. Setup PythonOCC (CAD Engine)
+
+```bash
+# Create conda environment
 conda create -n opencascade python=3.10 -y
 conda activate opencascade
 conda install -c conda-forge pythonocc-core -y
+```
 
-# 2. Start Backend
+### 3. Configure Environment
+
+Create `server/.env` file:
+
+```env
+PORT=5001
+DATABASE_URL="your_postgresql_connection_string"
+PYTHON_PATH="/path/to/conda/envs/opencascade/bin/python"
+```
+
+Get your Python path:
+```bash
+conda activate opencascade
+which python
+```
+
+### 4. Setup Database
+
+```bash
 cd server
-npm install
+npx prisma generate
+npx prisma db push
+```
+
+### 5. Start Development Servers
+
+```bash
+# From root directory
+npm run dev
+```
+
+This runs both frontend (port 3000) and backend (port 5001) simultaneously.
+
+**Or run separately:**
+
+```bash
+# Terminal 1 - Backend
+cd server
 npm run dev
 
-# 3. Start Frontend
+# Terminal 2 - Frontend
 cd frontend
-npm install
 npm run dev
-
-# 4. Open http://localhost:3000
 ```
 
-## 📖 Features
+### 6. Open Application
 
-### Current Implementation
-- **Dynamic Product Catalog**: Browse and select from multiple parametric models
-- **Real-time 3D Preview**: Interactive Three.js viewer with orbit controls
-- **Parameter Configuration**: Adjust dimensions with sliders and real-time validation
-- **CAD File Export**: Download STEP, STL, and BREP files
-- **Configuration Management**: Save and load configurations with revision tracking
-- **Database Storage**: PostgreSQL with Prisma ORM for persistence
+Navigate to `http://localhost:3000`
 
-### Export Formats
-- ✅ **STEP**: Standard CAD format for professional use
-- ✅ **STL**: 3D printing and mesh visualization
-- ✅ **BREP**: Native OCCT boundary representation
-- ⚠️ **DXF**: Placeholder only (no HLR implementation)
-- ❌ **PDF**: Not yet implemented
+## Usage
 
-## 📖 Usage
+1. Select a product from the catalog
+2. Adjust parameters using sliders
+3. Click "Generate Model"
+4. View 3D preview and download files
 
-1. Open `http://localhost:3000`
-2. Click on a product card (Bottle, Box, Cylinder, etc.)
-3. Switch to "Configurator" tab
-4. Adjust parameters using sliders
-5. Click "🚀 Generate Model"
-6. View 3D preview and download STEP/STL files
+## Tech Stack
 
-**Mouse Controls:**
-- **Left drag**: Rotate model
-- **Scroll**: Zoom in/out
-- **Right drag**: Pan view
+- **Frontend**: Next.js, React, Three.js, TypeScript, Tailwind CSS
+- **Backend**: Node.js, Express, Prisma, TypeScript
+- **CAD Engine**: PythonOCC (OpenCascade)
+- **Database**: PostgreSQL
 
-## 🗺️ Roadmap & Status
+## Troubleshooting
 
-> **See [PROJECT_STATUS.md](PROJECT_STATUS.md) for detailed milestone analysis**
-
-| Milestone | Target | Status | Completion |
-|-----------|--------|--------|------------|
-| **M1**: Proof of Concept | 2 weeks | ⚠️ Partial | 75% |
-| **M2**: Drawing Engine | 3 weeks | ❌ Not Started | 0% |
-| **M3**: Full Configurator | 3 weeks | ⚠️ Partial | 80% |
-| **M4**: Azure Deployment | 2 weeks | ❌ Not Started | 0% |
-| **Overall** | | | **~40%** |
-
-### Critical Missing Features:
-1. **Hidden Line Removal (HLR)** for real DXF generation
-2. **Multi-view 2D drawings** with dimensions and title blocks
-3. **PDF export** for technical documentation
-4. **Azure deployment** with MS SQL Server
-5. **Production containerization**
-
-## 🛠️ Project Structure
-
-```
-open-cascade-configurator/
-├── frontend/              # React + Next.js + Three.js
-│   ├── app/              # Next.js pages and routes
-│   ├── components/       # React components (3D viewer, UI)
-│   └── lib/              # API client and utilities
-│
-├── server/               # Node.js + Express + TypeScript
-│   ├── src/
-│   │   ├── app.ts       # Express server setup
-│   │   ├── routes/      # API routes
-│   │   └── services/    # Business logic
-│   └── prisma/          # Database schema and migrations
-│
-└── python-api/          # PythonOCC CAD engine
-    ├── core/            # Export utilities
-    └── products/        # Product generators (box, bottle, etc.)
+**Frontend not starting?**
+```bash
+cd frontend && npm install
 ```
 
-## 📚 Documentation
-
-- **[README.md](README.md)** - This file (project overview)
-- **[PROJECT_STATUS.md](PROJECT_STATUS.md)** - Original scope vs current implementation
-- **[QUICK_START.md](QUICK_START.md)** - Setup and installation guide
-
-## 🐛 Troubleshooting
-
-**Backend not starting?**
+**Backend errors?**
 - Check `PYTHON_PATH` in `server/.env`
-- Verify conda environment: `conda activate opencascade && which python`
-
-**Model generation failing?**
-- Check backend terminal for Python errors
-- Test PythonOCC: `python python-api/test_occt.py`
+- Verify: `conda activate opencascade && python python-api/test_occt.py`
 
 **Database issues?**
 - Verify `DATABASE_URL` in `server/.env`
-- Run migrations: `cd server && npx prisma migrate dev`
+- Run: `cd server && npx prisma db push`
 
-## 📄 License
+## Documentation
+
+- [PROJECT_STATUS.md](PROJECT_STATUS.md) - Detailed project status
+- [QUICK_START.md](QUICK_START.md) - Comprehensive setup guide
+- [BACKEND_README.md](BACKEND_README.md) - Backend architecture
+
+## License
 
 Proprietary - All rights reserved
-
----
-
-**Built with React, Three.js, Node.js, and PythonOCC**
 
